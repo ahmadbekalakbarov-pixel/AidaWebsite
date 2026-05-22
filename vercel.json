@@ -6,7 +6,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "aida-luxury.html",
+      "src": "index.html",
       "use": "@vercel/static"
     }
   ],
@@ -17,7 +17,7 @@
     },
     {
       "src": "/",
-      "dest": "aida-luxury.html"
+      "dest": "index.html"
     }
   ]
 }

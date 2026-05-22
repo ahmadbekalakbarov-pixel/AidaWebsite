@@ -4,6 +4,10 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "aida-luxury.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -12,8 +16,8 @@
       "dest": "server.js"
     },
     {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "src": "/",
+      "dest": "aida-luxury.html"
     }
   ]
 }

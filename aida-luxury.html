@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>Aida AI — Luxury Wellness</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--pk:#E91E8C;--pk2:#FF4DA6;--rose:#C2185B;--rg:#C9956C;--dark:#130610;--dark2:#1E0A18;--card:rgba(255,255,255,0.055);--border:rgba(233,30,140,0.22);--gold:#D4AF7A;--muted:rgba(255,255,255,0.42);}
+html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--dark);color:#fff;}
+button{font-family:'DM Sans',sans-serif;cursor:pointer;}
+input,textarea,select{font-family:'DM Sans',sans-serif;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+#app{height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
+.screen{display:none;flex:1;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#loader{position:fixed;inset:0;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4rem;z-index:9999;transition:opacity .6s;}
+#loader.out{opacity:0;pointer-events:none;}
+.ld-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:64px;background:linear-gradient(135deg,#FFB3D9,#E91E8C,#C9956C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ld-tag{font-size:11px;letter-spacing:.18em;color:rgba(255,179,217,.45);text-transform:uppercase;}
+.ld-bar{width:100px;height:1.5px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;}
+.ld-fill{height:100%;background:linear-gradient(90deg,var(--pk),var(--gold));animation:ldf 1.8s ease forwards;}
+@keyframes ldf{from{width:0}to{width:100%}}
+.lrow{display:flex;gap:6px;padding:.5rem 1rem 0;flex-shrink:0;}
+.lb{padding:4px 12px;border-radius:16px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-weight:500;letter-spacing:.06em;transition:all .2s;}
+.lb.on{background:var(--pk);border-color:var(--pk);color:#fff;}
+.bnav{display:flex;background:rgba(19,6,16,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(233,30,140,.1);flex-shrink:0;}
+.bni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:10px 0 14px;border:none;background:transparent;color:rgba(255,255,255,.28);transition:color .2s;}
+.bni.on{color:var(--pk);}
+.bni-ic{font-size:19px;}.bni-lb{font-size:9px;letter-spacing:.03em;}
+.ph{padding:3rem 1.4rem .8rem;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.back{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.07);border:none;color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.ph-t{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;background:linear-gradient(90deg,#FFB3D9,#E91E8C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px;}
+.inp{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:14px;padding:11px 14px;color:#fff;font-size:13px;outline:none;transition:border-color .2s;}
+.inp::placeholder{color:rgba(255,255,255,.22);}.inp:focus{border-color:var(--pk);}
+textarea.inp{resize:none;line-height:1.5;}
+.lbl{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.btn-main{width:100%;padding:14px;border-radius:16px;background:linear-gradient(135deg,var(--pk),var(--rose));border:none;color:#fff;font-size:14px;font-weight:600;letter-spacing:.03em;transition:all .2s;}
+.btn-main:active{transform:scale(.97);}
+.btn-out{width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border);color:rgba(255,255,255,.7);font-size:13px;}
+.btn-ghost{padding:8px 14px;border-radius:12px;background:rgba(233,30,140,.12);border:1px solid var(--border);color:rgba(255,255,255,.7);font-size:12px;}
+.gs{display:flex;flex-direction:column;gap:8px;}
+.gm{display:flex;flex-direction:column;gap:12px;}
+.divider{height:1px;background:rgba(255,255,255,.05);margin:.5rem 0;}
+.hidden{display:none!important;}
+.fi{display:none;}
+#home{background:linear-gradient(160deg,#200516 0%,#130610 55%,#1A0812 100%);position:relative;overflow:hidden;}
+.hblob{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px);opacity:.18;}
+.hb1{width:340px;height:340px;background:#E91E8C;top:-130px;right:-90px;}
+.hb2{width:220px;height:220px;background:#FF80C0;bottom:120px;left:-80px;}
+.hb3{width:160px;height:160px;background:#C9956C;top:60%;right:0;}
+.h-top{display:flex;justify-content:space-between;align-items:flex-start;padding:3rem 1.4rem 0;}
+.h-gr{position:relative;z-index:1;}
+.h-hi{font-size:13px;color:rgba(255,179,217,.6);font-weight:300;}
+.h-nm{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:32px;background:linear-gradient(90deg,#FFD6EC,#E91E8C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;}
+.h-dt{font-size:11px;color:var(--muted);margin-top:2px;}
+.h-av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#FF80C0,#C2185B);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#fff;border:2px solid rgba(233,30,140,.3);overflow:hidden;flex-shrink:0;position:relative;z-index:1;cursor:pointer;}
+.h-av img{width:100%;height:100%;object-fit:cover;}
+.aida-hero{background:linear-gradient(135deg,rgba(233,30,140,.12),rgba(201,21,91,.08));border:1px solid rgba(233,30,140,.2);border-radius:24px;padding:22px 20px;display:flex;align-items:center;gap:16px;position:relative;z-index:1;margin-top:1rem;}
+.aida-av{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FF80C0,#C2185B 55%,#7B0D3A);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28px;color:#fff;flex-shrink:0;position:relative;}
+.aida-p1,.aida-p2{position:absolute;inset:-5px;border-radius:50%;border:1.5px solid rgba(233,30,140,.35);animation:ap 2.5s ease-out infinite;}
+.aida-p2{animation-delay:.8s;}
+@keyframes ap{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.5);opacity:0}}
+.ai-inf h3{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#FFB3D9;}
+.ai-inf p{font-size:12px;color:var(--muted);line-height:1.5;margin-top:2px;}
+.ask-btn{margin-top:10px;padding:8px 18px;border-radius:12px;background:var(--pk);border:none;color:#fff;font-size:12px;font-weight:500;}
+.sec-t{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:1.2rem 0 .6rem;font-weight:500;}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:4px;}
+.tc-ic{font-size:22px;}.tc-v{font-size:20px;font-weight:600;}.tc-l{font-size:11px;color:var(--muted);}
+.pplan{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;}
+.ppi{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.ppi:last-child{border-bottom:none;}
+.pp-ck{width:18px;height:18px;border-radius:6px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
+.pp-ck.done{background:var(--pk);border-color:var(--pk);}
+.pp-tx{font-size:13px;color:rgba(255,255,255,.75);}
+.pp-tx.done{text-decoration:line-through;color:var(--muted);}
+.cab-sc{flex:1;overflow-y:auto;padding:0 1.4rem 1rem;display:flex;flex-direction:column;gap:14px;}
+.pr-photo-w{display:flex;flex-direction:column;align-items:center;gap:10px;padding:1rem 0;}
+.pr-photo{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#FF80C0,#C2185B);border:3px solid rgba(233,30,140,.4);overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:32px;}
+.pr-photo img{width:100%;height:100%;object-fit:cover;}
+.ph-hint{font-size:11px;color:var(--muted);}
+.body-ph-w{position:relative;width:100%;aspect-ratio:3/4;max-height:260px;border-radius:20px;border:2px dashed var(--border);background:rgba(255,255,255,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;overflow:hidden;}
+.body-ph-w img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:18px;}
+.bp-ic{font-size:30px;opacity:.4;}.bp-ht{font-size:12px;color:var(--muted);}
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.mi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;}
+.mi-v{font-size:18px;font-weight:600;}.mi-l{font-size:10px;color:var(--muted);margin-top:2px;}
+.ach-w{display:flex;flex-direction:column;gap:8px;}
+.ach{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;}
+.ach-ic{font-size:20px;}.ach-in h4{font-size:13px;font-weight:500;}.ach-in p{font-size:11px;color:var(--muted);}
+.dl-sc{flex:1;overflow-y:auto;padding:0 1.4rem 1rem;display:flex;flex-direction:column;gap:14px;}
+.dn{display:flex;align-items:center;justify-content:space-between;padding:.4rem 0;}
+.da{width:32px;height:32px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.ds{display:flex;flex-direction:column;gap:8px;}
+.ds-h{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.ds-ic{width:32px;height:32px;border-radius:10px;background:rgba(233,30,140,.12);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.ds-t{font-size:13px;font-weight:500;}
+.fe{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;}
+.fe-t{flex:1;font-size:13px;color:rgba(255,255,255,.8);}
+.fe-c{font-size:11px;color:var(--pk);font-weight:500;}
+.fe-d{width:24px;height:24px;border-radius:8px;background:rgba(255,50,50,.1);border:none;color:rgba(255,80,80,.7);font-size:12px;}
+.afr{display:flex;gap:8px;}
+.exe{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;}
+.exe-ic{font-size:18px;}.exe-n{flex:1;font-size:13px;color:rgba(255,255,255,.85);}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sc2{aspect-ratio:3/4;border-radius:16px;border:2px dashed var(--border);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;overflow:hidden;position:relative;}
+.sc2 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.sc2-l{font-size:10px;color:var(--muted);text-align:center;padding:0 6px;}
+.sc2-ic{font-size:24px;opacity:.35;}
+.adv-card{background:var(--card);border:1px solid rgba(233,30,140,.3);border-radius:20px;padding:18px;}
+.adv-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.adv-av{width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FF80C0,#C2185B);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:#fff;}
+.adv-nm{font-size:13px;font-weight:500;}.adv-sb{font-size:10px;color:var(--muted);}
+.adv-tx{font-size:13px;color:rgba(255,255,255,.8);line-height:1.6;}
+.pl-sc{flex:1;overflow-y:auto;padding:0 1.4rem 1rem;display:flex;flex-direction:column;gap:14px;}
+.ptabs{display:flex;gap:6px;flex-wrap:wrap;}
+.ptab{padding:6px 14px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;transition:all .2s;}
+.ptab.on{background:var(--pk);border-color:var(--pk);color:#fff;}
+.par{display:flex;gap:8px;align-items:center;}
+.plist{display:flex;flex-direction:column;gap:8px;}
+.pli{display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;}
+.pli-ck{width:20px;height:20px;border-radius:7px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;cursor:pointer;margin-top:1px;transition:all .2s;}
+.pli-ck.done{background:var(--pk);border-color:var(--pk);}
+.pli-b{flex:1;}.pli-tx{font-size:13px;color:rgba(255,255,255,.82);}
+.pli-tx.done{text-decoration:line-through;color:var(--muted);}
+.pli-tm{font-size:10px;color:var(--muted);margin-top:2px;}
+.pli-d{width:26px;height:26px;border-radius:8px;background:rgba(255,50,50,.08);border:none;color:rgba(255,80,80,.6);font-size:12px;flex-shrink:0;}
+.pr-sc{flex:1;overflow-y:auto;padding:0 1.4rem 1rem;display:flex;flex-direction:column;gap:14px;}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.cc{border-radius:18px;border:2px dashed var(--border);background:var(--card);overflow:hidden;position:relative;aspect-ratio:3/4;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
+.cc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.cc-l{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));padding:8px;text-align:center;font-size:11px;color:rgba(255,255,255,.7);}
+.cc-ic{font-size:28px;opacity:.35;}.cc-ht{font-size:11px;color:var(--muted);text-align:center;}
+.ana{background:var(--card);border:1px solid rgba(233,30,140,.3);border-radius:20px;padding:18px;display:none;}
+.ana.on{display:block;}
+.st-r{display:flex;gap:8px;margin-top:10px;}
+.sb{flex:1;background:rgba(255,255,255,.04);border-radius:12px;padding:10px;text-align:center;}
+.sb-v{font-size:18px;font-weight:600;color:var(--pk);}.sb-l{font-size:10px;color:var(--muted);margin-top:2px;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.chip{padding:4px 10px;border-radius:10px;font-size:11px;}
+.cg{background:rgba(100,200,100,.12);border:1px solid rgba(100,200,100,.25);color:#8ADFAA;}
+.ct{background:rgba(233,30,140,.1);border:1px solid var(--border);color:#FFB3D9;}
+#vcall{background:#0A0305;position:relative;overflow:hidden;}
+.vc-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 25%,#1E0516,#0A0305 70%);}
+.vc-main{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;}
+.vc-av{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FF80C0,#C2185B 55%,#7B0D3A);display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:.8rem;}
+.vc-avl{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:60px;color:rgba(255,255,255,.9);}
+.sr{position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(233,30,140,.5);opacity:0;}
+.vc-sp .sr{animation:vsp 1.8s ease-out infinite;}
+.vc-sp .sr:nth-child(2){animation-delay:.6s;}
+.vc-sp .sr:nth-child(3){animation-delay:1.2s;}
+@keyframes vsp{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.7);opacity:0}}
+.vc-mouth{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);width:26px;height:6px;border-radius:0 0 13px 13px;background:rgba(0,0,0,.3);}
+.vc-sp .vc-mouth{animation:vm .25s ease-in-out infinite alternate;}
+@keyframes vm{0%{height:4px}100%{height:14px}}
+.vc-nm{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:rgba(255,255,255,.9);}
+.vc-st{font-size:11px;color:rgba(255,255,255,.35);margin-top:3px;}
+.vc-st.tk{color:#FF80C0;}
+.vc-sub-w{position:absolute;bottom:185px;left:1rem;right:1rem;text-align:center;z-index:3;}
+.vc-sub{display:inline-block;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);color:#fff;font-size:13px;line-height:1.5;padding:10px 16px;border-radius:14px;max-width:320px;font-weight:300;opacity:0;transition:opacity .3s;}
+.vc-sub.on{opacity:1;}
+.sv{position:absolute;top:4rem;right:1rem;width:80px;height:108px;border-radius:14px;background:#1A0810;border:2px solid rgba(233,30,140,.25);overflow:hidden;z-index:4;display:flex;align-items:center;justify-content:center;}
+.sv video{width:100%;height:100%;object-fit:cover;}
+.sv-ph{font-size:24px;opacity:.3;}
+.vc-ctrls{position:absolute;bottom:0;left:0;right:0;padding:1rem 2rem 2rem;background:linear-gradient(transparent,rgba(0,0,0,.85));z-index:5;display:flex;flex-direction:column;align-items:center;gap:.8rem;}
+.wv{display:flex;align-items:center;gap:3px;height:20px;}
+.wv span{width:3px;border-radius:3px;background:var(--pk);height:3px;}
+.waving .wv span{animation:wv .5s ease-in-out infinite alternate;}
+.wv span:nth-child(2){animation-delay:.1s;}
+.wv span:nth-child(3){animation-delay:.2s;}
+.wv span:nth-child(4){animation-delay:.1s;}
+@keyframes wv{from{height:3px}to{height:18px}}
+.vc-cr{display:flex;align-items:center;justify-content:center;gap:12px;}
+.vcb{width:50px;height:50px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(255,255,255,.1);color:#fff;transition:all .15s;}
+.vcb:active{transform:scale(.9);}
+.vcb.big{width:66px;height:66px;font-size:22px;}
+.vcb.pink{background:var(--pk);}
+.vcb.danger{background:#C62828;}
+.vcb.rec{background:var(--pk);animation:rp 1s ease-in-out infinite;}
+@keyframes rp{0%,100%{box-shadow:0 0 0 0 rgba(233,30,140,.4)}50%{box-shadow:0 0 0 12px rgba(233,30,140,0)}}
+.ch-hdr{padding:3rem 1.4rem .8rem;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(233,30,140,.08);flex-shrink:0;}
+.ch-av{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FF80C0,#C2185B);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#fff;}
+.ch-t{font-size:14px;font-weight:500;}.ch-s{font-size:10px;color:rgba(255,255,255,.35);}
+.ch-msgs{flex:1;overflow-y:auto;padding:1rem 1.2rem;display:flex;flex-direction:column;gap:10px;}
+.cmsg{display:flex;gap:7px;align-items:flex-end;}
+.cmsg.user{flex-direction:row-reverse;}
+.cmsg-av{width:24px;height:24px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 35%,#FF80C0,#C2185B);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:10px;color:#fff;}
+.cbbl{max-width:78%;padding:9px 14px;border-radius:17px;font-size:13px;line-height:1.5;}
+.cmsg.aida .cbbl{background:rgba(255,255,255,.07);color:rgba(255,255,255,.88);border-bottom-left-radius:3px;}
+.cmsg.user .cbbl{background:linear-gradient(135deg,var(--pk),var(--rose));color:#fff;border-bottom-right-radius:3px;}
+.ch-bar{padding:.8rem 1.2rem 1.6rem;display:flex;gap:9px;align-items:center;border-top:1px solid rgba(233,30,140,.06);flex-shrink:0;}
+.ch-inp{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:22px;padding:10px 16px;color:#fff;font-size:13px;outline:none;transition:border-color .2s;}
+.ch-inp::placeholder{color:rgba(255,255,255,.2);}.ch-inp:focus{border-color:var(--pk);}
+.ch-send{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--rose));border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="loader">
+  <div class="ld-logo">Aida</div>
+  <div class="ld-tag">Luxury Wellness AI</div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+</div>
+<!-- HOME -->
+<div class="screen active" id="home">
+  <div class="hblob hb1"></div><div class="hblob hb2"></div><div class="hblob hb3"></div>
+  <div class="lrow" style="padding-top:2.8rem;">
+    <button class="lb on" onclick="setLang('en')">EN</button>
+    <button class="lb" onclick="setLang('ru')">RU</button>
+    <button class="lb" onclick="setLang('uz')">UZ</button>
+  </div>
+  <div class="h-top">
+    <div class="h-gr">
+      <div class="h-hi" id="h-hi">Good day,</div>
+      <div class="h-nm" id="h-nm">Beautiful</div>
+      <div class="h-dt" id="h-dt"></div>
+    </div>
+    <div class="h-av" onclick="goTo('cabinet')" id="h-av">A</div>
+  </div>
+  <div class="scroll" style="padding:0 1.4rem 1rem;">
+    <div class="aida-hero">
+      <div class="aida-av"><div class="aida-p1"></div><div class="aida-p2"></div>A</div>
+      <div class="ai-inf">
+        <h3 data-i="aidaHi">Hi, I'm Aida ✨</h3>
+        <p data-i="aidaDesc">Your luxury wellness guide for beauty, fitness & skin.</p>
+        <button class="ask-btn" onclick="goTo('chat')" data-i="askBtn">Ask Aida</button>
+      </div>
+    </div>
+    <div class="sec-t" data-i="todayLabel">TODAY'S OVERVIEW</div>
+    <div class="tgrid">
+      <div class="tc"><div class="tc-ic">🔥</div><div class="tc-v" id="tc-cal">—</div><div class="tc-l" data-i="cal">Calories</div></div>
+      <div class="tc"><div class="tc-ic">👟</div><div class="tc-v" id="tc-stp">—</div><div class="tc-l" data-i="steps">Steps</div></div>
+      <div class="tc"><div class="tc-ic">💪</div><div class="tc-v" id="tc-ex">—</div><div class="tc-l" data-i="exLabel">Exercises</div></div>
+      <div class="tc"><div class="tc-ic">💧</div><div class="tc-v" id="tc-w">—</div><div class="tc-l" data-i="water">Water ml</div></div>
+    </div>
+    <div class="sec-t" data-i="todayPlan">TODAY'S PLAN</div>
+    <div class="pplan" id="h-plan"><div style="text-align:center;padding:1rem;color:var(--muted);font-size:13px;" data-i="noPlan">No plans yet — go to Planner!</div></div>
+    <div class="sec-t" data-i="talkAida">TALK TO AIDA</div>
+    <button class="btn-main" onclick="goTo('vcall')">📹 &nbsp;<span data-i="videoCall">Video Call with Aida</span></button>
+    <div style="height:1rem;"></div>
+  </div>
+</div>
+<!-- CABINET -->
+<div class="screen" id="cabinet">
+  <div class="ph"><button class="back" onclick="goTo('home')">←</button><div class="ph-t" data-i="myCabinet">My Cabinet</div></div>
+  <div class="cab-sc">
+    <div class="pr-photo-w">
+      <div class="pr-photo" onclick="document.getElementById('fu-face').click()" id="cab-face">A</div>
+      <div class="ph-hint" data-i="tapFace">Tap to change photo</div>
+    </div>
+    <div class="card gs">
+      <div class="lbl" data-i="persInfo">PERSONAL INFORMATION</div>
+      <div><div class="lbl" data-i="name">Name</div><input class="inp" id="c-name" oninput="saveProf()"/></div>
+      <div class="row2">
+        <div><div class="lbl" data-i="age">Age</div><input class="inp" type="number" id="c-age" oninput="saveProf()"/></div>
+        <div><div class="lbl" data-i="goal">Goal</div>
+          <select class="inp" id="c-goal" onchange="saveProf()">
+            <option value="">Select</option><option value="lose">Lose weight</option>
+            <option value="tone">Get toned</option><option value="gain">Build muscle</option><option value="glow">Skin glow</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="card gs">
+      <div class="lbl" data-i="measures">MEASUREMENTS</div>
+      <div class="row2">
+        <div><div class="lbl" data-i="height">Height cm</div><input class="inp" type="number" id="c-h" oninput="saveProf();updMg()"/></div>
+        <div><div class="lbl" data-i="weight">Weight kg</div><input class="inp" type="number" id="c-w" oninput="saveProf();updMg()"/></div>
+      </div>
+      <div class="row3">
+        <div><div class="lbl">Bust cm</div><input class="inp" type="number" id="c-bu" oninput="saveProf();updMg()"/></div>
+        <div><div class="lbl">Waist cm</div><input class="inp" type="number" id="c-wa" oninput="saveProf();updMg()"/></div>
+        <div><div class="lbl">Hips cm</div><input class="inp" type="number" id="c-hi" oninput="saveProf();updMg()"/></div>
+      </div>
+      <div class="mg" id="mg-disp"></div>
+    </div>
+    <div class="card gs">
+      <div class="lbl" data-i="bodyPhoto">FULL BODY PHOTO</div>
+      <div class="body-ph-w" onclick="document.getElementById('fu-body').click()" id="body-ph-area">
+        <div class="bp-ic">🤳</div><div class="bp-ht" data-i="uploadBody">Upload full body photo</div>
+      </div>
+    </div>
+    <div class="card gs">
+      <div class="lbl" data-i="achiev">MY ACHIEVEMENTS</div>
+      <div class="ach-w" id="ach-list"><div style="text-align:center;padding:.8rem;color:var(--muted);font-size:13px;" data-i="noAch">Log daily to earn achievements!</div></div>
+    </div>
+  </div>
+</div>
+<!-- DAILY LOG -->
+<div class="screen" id="daily">
+  <div class="ph"><button class="back" onclick="goTo('home')">←</button><div class="ph-t" data-i="dailyLog">Daily Log</div></div>
+  <div class="dl-sc">
+    <div class="dn">
+      <button class="da" onclick="changeDay(-1)">←</button>
+      <div style="font-size:13px;font-weight:500;" id="dl-date"></div>
+      <button class="da" onclick="changeDay(1)">→</button>
+    </div>
+    <div class="ds">
+      <div class="ds-h"><div class="ds-ic">🍽️</div><div class="ds-t" data-i="foodToday">Food Today</div></div>
+      <div id="food-list" class="gs"></div>
+      <div class="afr">
+        <input class="inp" id="f-inp" placeholder="e.g. Salad" style="flex:1"/>
+        <input class="inp" id="f-cal" placeholder="kcal" style="width:70px"/>
+        <button class="btn-ghost" onclick="addFood()" data-i="add">Add</button>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="ds">
+      <div class="ds-h"><div class="ds-ic">💧</div><div class="ds-t" data-i="water">Water ml</div></div>
+      <input class="inp" type="number" id="w-inp" placeholder="e.g. 2000" oninput="saveFld('water',this.value)"/>
+    </div>
+    <div class="divider"></div>
+    <div class="ds">
+      <div class="ds-h"><div class="ds-ic">💪</div><div class="ds-t" data-i="exToday">Exercises</div></div>
+      <div id="ex-list" class="gs"></div>
+      <div class="afr">
+        <input class="inp" id="ex-inp" placeholder="e.g. 30 min yoga" style="flex:1"/>
+        <button class="btn-ghost" onclick="addEx()" data-i="add">Add</button>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="ds">
+      <div class="ds-h"><div class="ds-ic">👟</div><div class="ds-t" data-i="steps">Steps</div></div>
+      <input class="inp" type="number" id="stp-inp" placeholder="e.g. 8500" oninput="saveFld('steps',this.value)"/>
+    </div>
+    <div class="divider"></div>
+    <div class="ds">
+      <div class="ds-h"><div class="ds-ic">📸</div><div class="ds-t" data-i="photos">Today's Photos</div></div>
+      <div class="sg">
+        <div class="sc2" onclick="document.getElementById('fu-sf').click()" id="sf-area">
+          <div class="sc2-ic">🤳</div><div class="sc2-l" data-i="facePh">Face photo</div>
+        </div>
+        <div class="sc2" onclick="document.getElementById('fu-sb').click()" id="sb-area">
+          <div class="sc2-ic">🧍</div><div class="sc2-l" data-i="bodyPh">Body photo</div>
+        </div>
+      </div>
+      <button class="btn-out" onclick="getAdvice()" data-i="getAdvice">✨ Get Aida's Daily Advice</button>
+    </div>
+    <div class="adv-card" id="adv-card" style="display:none;">
+      <div class="adv-head"><div class="adv-av">A</div><div><div class="adv-nm">Aida</div><div class="adv-sb" data-i="dailyAdv">Daily Advice</div></div></div>
+      <div class="adv-tx" id="adv-tx"></div>
+    </div>
+  </div>
+</div>
+<!-- PLANNER -->
+<div class="screen" id="plan">
+  <div class="ph"><button class="back" onclick="goTo('home')">←</button><div class="ph-t" data-i="planner">Daily Planner</div></div>
+  <div class="pl-sc">
+    <div class="dn">
+      <button class="da" onclick="chPlanDay(-1)">←</button>
+      <div style="font-size:13px;font-weight:500;" id="pl-date"></div>
+      <button class="da" onclick="chPlanDay(1)">→</button>
+    </div>
+    <div class="ptabs">
+      <button class="ptab on" onclick="setPTab('tasks',this)" data-i="tasks">Tasks</button>
+      <button class="ptab" onclick="setPTab('skin',this)" data-i="skinTab">Skincare</button>
+      <button class="ptab" onclick="setPTab('fit',this)" data-i="fitTab">Fitness</button>
+      <button class="ptab" onclick="setPTab('notes',this)" data-i="notesTab">Notes</button>
+    </div>
+    <div id="ptab-tasks">
+      <div class="par" style="margin-bottom:8px;">
+        <input class="inp" id="t-inp" placeholder="Add task..." style="flex:1"/>
+        <input class="inp" id="t-time" placeholder="10:00" style="width:68px"/>
+        <button class="btn-ghost" onclick="addTask()">+</button>
+      </div>
+      <div class="plist" id="pl-tasks"></div>
+      <button class="btn-out" style="margin-top:8px;" onclick="genPlan()" data-i="genPlan">✨ Let Aida Generate My Plan</button>
+    </div>
+    <div id="ptab-skin" class="hidden">
+      <div class="par" style="margin-bottom:8px;">
+        <input class="inp" id="sk-inp" placeholder="e.g. Apply cucumber mask" style="flex:1"/>
+        <button class="btn-ghost" onclick="addSkin()">+</button>
+      </div>
+      <div class="plist" id="pl-skin"></div>
+      <button class="btn-out" style="margin-top:8px;" onclick="genSkin()" data-i="genSkin">✨ Generate Skincare Routine</button>
+    </div>
+    <div id="ptab-fit" class="hidden">
+      <div class="par" style="margin-bottom:8px;">
+        <input class="inp" id="fit-inp" placeholder="e.g. 30 min run" style="flex:1"/>
+        <button class="btn-ghost" onclick="addFit()">+</button>
+      </div>
+      <div class="plist" id="pl-fit"></div>
+      <button class="btn-out" style="margin-top:8px;" onclick="genFit()" data-i="genFit">✨ Generate Fitness Plan</button>
+    </div>
+    <div id="ptab-notes" class="hidden">
+      <textarea class="inp" id="pl-notes" rows="8" placeholder="Write your thoughts..." oninput="saveNotes()"></textarea>
+    </div>
+  </div>
+</div>
+<!-- PROGRESS -->
+<div class="screen" id="progress">
+  <div class="ph"><button class="back" onclick="goTo('home')">←</button><div class="ph-t" data-i="progress">Progress & Analysis</div></div>
+  <div class="pr-sc">
+    <div class="card gs">
+      <div class="lbl" data-i="bodyCmp">BODY COMPARISON</div>
+      <div class="cmp">
+        <div class="cc" onclick="document.getElementById('fu-before').click()" id="cc-before">
+          <div class="cc-ic">📸</div><div class="cc-ht" data-i="before">Before</div><div class="cc-l" data-i="before">Before</div>
+        </div>
+        <div class="cc" onclick="document.getElementById('fu-after').click()" id="cc-after">
+          <div class="cc-ic">📸</div><div class="cc-ht" data-i="after">After</div><div class="cc-l" data-i="after">After</div>
+        </div>
+      </div>
+      <button class="btn-main" onclick="analyzeBody()" data-i="analyzeBody">✨ Analyze My Progress</button>
+    </div>
+    <div class="card gs">
+      <div class="lbl" data-i="measureProg">MEASUREMENT PROGRESS</div>
+      <div class="st-r">
+        <div class="sb"><div class="sb-v" id="pg-wt">—</div><div class="sb-l" data-i="weight">Weight</div></div>
+        <div class="sb"><div class="sb-v" id="pg-bu">—</div><div class="sb-l">Bust</div></div>
+        <div class="sb"><div class="sb-v" id="pg-wa">—</div><div class="sb-l">Waist</div></div>
+        <div class="sb"><div class="sb-v" id="pg-hi">—</div><div class="sb-l">Hips</div></div>
+      </div>
+    </div>
+    <div class="ana" id="ana-card">
+      <div class="adv-head"><div class="adv-av">A</div><div><div class="adv-nm">Aida</div><div class="adv-sb" data-i="progReport">Progress Report</div></div></div>
+      <div class="adv-tx" id="ana-tx"></div>
+      <div class="chips" id="ana-chips"></div>
+    </div>
+  </div>
+</div>
+<!-- VIDEO CALL -->
+<div class="screen" id="vcall">
+  <div class="vc-bg"></div>
+  <div class="lrow" style="position:absolute;top:0;left:0;right:0;z-index:10;padding-top:2.8rem;">
+    <button class="lb" onclick="setLang('en')">EN</button>
+    <button class="lb" onclick="setLang('ru')">RU</button>
+    <button class="lb" onclick="setLang('uz')">UZ</button>
+  </div>
+  <div class="vc-main">
+    <div class="vc-av" id="vc-av">
+      <div class="sr"></div><div class="sr"></div><div class="sr"></div>
+      <div class="vc-avl">A</div><div class="vc-mouth"></div>
+    </div>
+    <div class="vc-nm">Aida</div>
+    <div class="vc-st" id="vc-st" data-i="tapTalk">Tap mic to start talking</div>
+  </div>
+  <div class="vc-sub-w"><div class="vc-sub" id="vc-sub"></div></div>
+  <div class="sv"><video id="vc-vid" autoplay muted playsinline></video><div class="sv-ph" id="vc-cam-ph">🎥</div></div>
+  <div class="vc-ctrls">
+    <div id="vc-wave-w"><div class="wv" id="vc-wv"><span></span><span></span><span></span><span></span><span></span></div></div>
+    <div class="vc-cr">
+      <button class="vcb" onclick="vcCam()">📷</button>
+      <button class="vcb big" id="vc-mic" onclick="vcMic()">🎤</button>
+      <button class="vcb pink" onclick="vcSkin()">✨</button>
+      <button class="vcb danger" onclick="vcEnd()">📵</button>
+    </div>
+    <div style="font-size:10px;color:rgba(255,255,255,.2);" data-i="tapHint">Tap mic and speak to Aida</div>
+  </div>
+</div>
+<!-- CHAT -->
+<div class="screen" id="chat">
+  <div class="ch-hdr">
+    <button class="back" onclick="goTo('home')">←</button>
+    <div class="ch-av">A</div>
+    <div style="flex:1;"><div class="ch-t">Aida</div><div class="ch-s"><span style="color:#FF80C0;">●</span> <span data-i="online">Online</span></div></div>
+    <div style="display:flex;gap:4px;">
+      <button class="lb" onclick="setLang('en')" style="padding:3px 9px;font-size:10px;">EN</button>
+      <button class="lb" onclick="setLang('ru')" style="padding:3px 9px;font-size:10px;">RU</button>
+      <button class="lb" onclick="setLang('uz')" style="padding:3px 9px;font-size:10px;">UZ</button>
+    </div>
+  </div>
+  <div class="ch-msgs" id="ch-msgs"></div>
+  <div class="ch-bar">
+    <input class="ch-inp" id="ch-inp" onkeydown="if(event.key==='Enter')chatSend()"/>
+    <button class="ch-send" onclick="chatSend()"><svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button>
+  </div>
+</div>
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <button class="bni on" id="bni-home" onclick="goTo('home')"><div class="bni-ic">🏠</div><div class="bni-lb" data-i="navHome">Home</div></button>
+  <button class="bni" id="bni-cabinet" onclick="goTo('cabinet')"><div class="bni-ic">👤</div><div class="bni-lb" data-i="navCab">Cabinet</div></button>
+  <button class="bni" id="bni-daily" onclick="goTo('daily')"><div class="bni-ic">📋</div><div class="bni-lb" data-i="navDaily">Daily</div></button>
+  <button class="bni" id="bni-plan" onclick="goTo('plan')"><div class="bni-ic">📅</div><div class="bni-lb" data-i="navPlan">Planner</div></button>
+  <button class="bni" id="bni-progress" onclick="goTo('progress')"><div class="bni-ic">📊</div><div class="bni-lb" data-i="navProg">Progress</div></button>
+</div>
+<!-- FILE INPUTS -->
+<input type="file" class="fi" id="fu-face" accept="image/*" onchange="loadFace(event)"/>
+<input type="file" class="fi" id="fu-body" accept="image/*" onchange="loadBodyPh(event)"/>
+<input type="file" class="fi" id="fu-sf" accept="image/*" capture="environment" onchange="loadSnapFace(event)"/>
+<input type="file" class="fi" id="fu-sb" accept="image/*" onchange="loadSnapBody(event)"/>
+<input type="file" class="fi" id="fu-before" accept="image/*" onchange="loadBefore(event)"/>
+<input type="file" class="fi" id="fu-after" accept="image/*" onchange="loadAfter(event)"/>
+</div>
+<script>
+const T={
+  en:{aidaHi:"Hi, I'm Aida ✨",aidaDesc:"Your luxury wellness guide for beauty, fitness & skin.",askBtn:"Ask Aida",todayLabel:"TODAY'S OVERVIEW",cal:"Calories",steps:"Steps",exLabel:"Exercises",water:"Water ml",todayPlan:"TODAY'S PLAN",talkAida:"TALK TO AIDA",videoCall:"Video Call with Aida",noPlan:"No plans yet — go to Planner!",myCabinet:"My Cabinet",tapFace:"Tap to change photo",persInfo:"PERSONAL INFORMATION",name:"Name",age:"Age",goal:"Goal",measures:"MEASUREMENTS",height:"Height cm",weight:"Weight kg",bodyPhoto:"FULL BODY PHOTO",uploadBody:"Upload full body photo",achiev:"MY ACHIEVEMENTS",noAch:"Log daily to earn achievements!",dailyLog:"Daily Log",foodToday:"Food Today",add:"Add",exToday:"Exercises",photos:"Today's Photos",facePh:"Face photo",bodyPh:"Body photo",getAdvice:"✨ Get Aida's Daily Advice",dailyAdv:"Daily Advice",planner:"Daily Planner",tasks:"Tasks",skinTab:"Skincare",fitTab:"Fitness",notesTab:"Notes",genPlan:"✨ Let Aida Generate My Plan",genSkin:"✨ Generate Skincare Routine",genFit:"✨ Generate Fitness Plan",progress:"Progress & Analysis",bodyCmp:"BODY COMPARISON",before:"Before",after:"After",analyzeBody:"✨ Analyze My Progress",measureProg:"MEASUREMENT PROGRESS",progReport:"Progress Report",tapTalk:"Tap mic to start talking",tapHint:"Tap mic and speak to Aida",online:"Online",navHome:"Home",navCab:"Cabinet",navDaily:"Daily",navPlan:"Planner",navProg:"Progress",chPh:"Ask Aida anything...",chWelcome:"Hi! I'm Aida 🌸 Your personal beauty and wellness guide. How can I help you today?",greet:"Hello beautiful! I'm Aida, your luxury wellness guide. I can help with skincare routines, fitness plans, nutrition, beauty tips, and daily planning. What shall we work on today?",listen:"Listening...",think:"Thinking...",speak:"Aida is speaking...",sys:"You are Aida, a warm expert luxury wellness AI for women. You specialize in skincare, beauty, fitness plans, nutrition for skin health, body transformation, and daily planning. Give warm, specific, encouraging advice. Respond in English."},
+  ru:{aidaHi:"Привет, я Айда ✨",aidaDesc:"Ваш люкс-помощник по красоте и здоровью.",askBtn:"Спросить Айду",todayLabel:"СЕГОДНЯ",cal:"Калории",steps:"Шаги",exLabel:"Упражнения",water:"Вода мл",todayPlan:"ПЛАН НА СЕГОДНЯ",talkAida:"ПОГОВОРИТЬ С АЙДОЙ",videoCall:"Видеозвонок с Айдой",noPlan:"Нет планов — перейдите в Планировщик!",myCabinet:"Мой кабинет",tapFace:"Нажмите для изменения",persInfo:"ЛИЧНАЯ ИНФОРМАЦИЯ",name:"Имя",age:"Возраст",goal:"Цель",measures:"ЗАМЕРЫ",height:"Рост см",weight:"Вес кг",bodyPhoto:"ФОТО ТЕЛА",uploadBody:"Загрузить фото в полный рост",achiev:"МОИ ДОСТИЖЕНИЯ",noAch:"Ведите журнал для достижений!",dailyLog:"Ежедневный журнал",foodToday:"Еда сегодня",add:"Добавить",exToday:"Упражнения",photos:"Фото сегодня",facePh:"Фото лица",bodyPh:"Фото тела",getAdvice:"✨ Совет Айды на сегодня",dailyAdv:"Ежедневный совет",planner:"Планировщик",tasks:"Задачи",skinTab:"Уход за кожей",fitTab:"Фитнес",notesTab:"Заметки",genPlan:"✨ Айда создаст план",genSkin:"✨ Создать уход за кожей",genFit:"✨ Создать план тренировок",progress:"Прогресс",bodyCmp:"СРАВНЕНИЕ ФОТО",before:"До",after:"После",analyzeBody:"✨ Анализ прогресса",measureProg:"ЗАМЕРЫ",progReport:"Отчёт",tapTalk:"Нажмите микрофон",tapHint:"Нажмите и говорите с Айдой",online:"Онлайн",navHome:"Главная",navCab:"Кабинет",navDaily:"Дневник",navPlan:"Планер",navProg:"Прогресс",chPh:"Спросить Айду...",chWelcome:"Привет! Я Айда 🌸 Ваш помощник по красоте. Как помочь?",greet:"Привет, красавица! Я Айда — ваш персональный помощник по красоте и здоровью. Чем займёмся сегодня?",listen:"Слушаю...",think:"Думаю...",speak:"Айда говорит...",sys:"Вы Айда — тёплый профессиональный AI по красоте и здоровью. Специализируетесь на уходе за кожей, красоте, фитнесе, питании, планировании. Отвечайте на русском."},
+  uz:{aidaHi:"Salom, men Ayda ✨",aidaDesc:"Sizning go'zallik va sog'liq yordamchingiz.",askBtn:"Aydadan so'ring",todayLabel:"BUGUNGI KUN",cal:"Kaloriya",steps:"Qadam",exLabel:"Mashqlar",water:"Suv ml",todayPlan:"BUGUNGI REJA",talkAida:"AYDA BILAN GAPLASHING",videoCall:"Ayda bilan video qo'ng'iroq",noPlan:"Rejalar yo'q — Planner ga o'ting!",myCabinet:"Mening kabinetim",tapFace:"Rasmni o'zgartirish",persInfo:"SHAXSIY MA'LUMOTLAR",name:"Ism",age:"Yosh",goal:"Maqsad",measures:"O'LCHAMLAR",height:"Bo'y sm",weight:"Vazn kg",bodyPhoto:"TANA RASMI",uploadBody:"To'liq tana rasmini yuklang",achiev:"YUTUQLARIM",noAch:"Kunlik jurnal yuritib yutuqlarga erishing!",dailyLog:"Kunlik jurnal",foodToday:"Bugungi ovqat",add:"Qo'shish",exToday:"Mashqlar",photos:"Bugungi rasmlar",facePh:"Yuz rasmi",bodyPh:"Tana rasmi",getAdvice:"✨ Ayda maslahati",dailyAdv:"Kunlik maslahat",planner:"Kunlik reja",tasks:"Vazifalar",skinTab:"Teri parvarishi",fitTab:"Fitnes",notesTab:"Eslatmalar",genPlan:"✨ Ayda reja tuzsin",genSkin:"✨ Teri parvarishi rejasi",genFit:"✨ Fitnes rejasi",progress:"Taraqqiyot",bodyCmp:"TANA TAQQOSLASH",before:"Oldin",after:"Keyin",analyzeBody:"✨ Taraqqiyotni tahlil qilish",measureProg:"O'LCHAM TARAQQIYOTI",progReport:"Taraqqiyot hisoboti",tapTalk:"Gapirish uchun mikrofonni bosing",tapHint:"Mikrofon bosib gaplashing",online:"Onlayn",navHome:"Bosh",navCab:"Kabinet",navDaily:"Jurnal",navPlan:"Reja",navProg:"Taraqqiyot",chPh:"Aydadan so'rang...",chWelcome:"Salom! Men Ayda 🌸 Go'zallik yordamchingizman. Bugun nima qilishimiz kerak?",greet:"Salom, go'zalim! Men Ayda — shaxsiy go'zallik yordamchingizman. Nima bilan shug'ullanamiz?",listen:"Tinglamoqdaman...",think:"O'ylamoqdaman...",speak:"Ayda gapirmoqda...",sys:"Siz Ayda — go'zallik va sog'liq AI yordamchisisiz. Doima o'zbek tilida javob bering."}
+};
+let lang='en';
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.textContent.trim().toUpperCase()===l.toUpperCase()));
+  document.querySelectorAll('[data-i]').forEach(el=>{const k=el.getAttribute('data-i');if(T[l][k]!=null)el.textContent=T[l][k];});
+  document.querySelectorAll('.ch-inp').forEach(el=>el.placeholder=T[l].chPh||'Ask Aida...');
+}
+const DB={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d;}catch{return d;}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
+const today=()=>new Date().toISOString().split('T')[0];
+const fmtDate=d=>new Date(d+'T12:00:00').toLocaleDateString(lang==='ru'?'ru-RU':lang==='uz'?'uz-Latn':'en-US',{weekday:'short',month:'short',day:'numeric'});
+const SCREENS=['home','cabinet','daily','plan','progress','vcall','chat'];
+function goTo(id){
+  SCREENS.forEach(s=>{document.getElementById(s).classList.remove('active');const n=document.getElementById('bni-'+s);if(n)n.classList.remove('on');});
+  document.getElementById(id).classList.add('active');
+  const ni=document.getElementById('bni-'+id);if(ni)ni.classList.add('on');
+  if(id==='vcall')initVC();
+  if(id==='home')refHome();
+  if(id==='cabinet')loadProf();
+  if(id==='daily')loadDly();
+  if(id==='plan')loadPlan();
+  if(id==='progress')loadProg();
+  if(id==='chat'&&document.getElementById('ch-msgs').children.length===0)addBubble('aida',T[lang].chWelcome);
+}
+function saveProf(){
+  const p={name:document.getElementById('c-name').value,age:document.getElementById('c-age').value,height:document.getElementById('c-h').value,weight:document.getElementById('c-w').value,bust:document.getElementById('c-bu').value,waist:document.getElementById('c-wa').value,hips:document.getElementById('c-hi').value,goal:document.getElementById('c-goal').value};
+  const old=DB.get('profile',{});DB.set('profile',{...old,...p});refHome();
+}
+function loadProf(){
+  const p=DB.get('profile',{});
+  document.getElementById('c-name').value=p.name||'';document.getElementById('c-age').value=p.age||'';
+  document.getElementById('c-h').value=p.height||'';document.getElementById('c-w').value=p.weight||'';
+  document.getElementById('c-bu').value=p.bust||'';document.getElementById('c-wa').value=p.waist||'';document.getElementById('c-hi').value=p.hips||'';
+  if(p.goal)document.getElementById('c-goal').value=p.goal;
+  if(p.facePhoto){document.getElementById('cab-face').innerHTML=`<img src="${p.facePhoto}"/>`;}
+  if(p.bodyPhoto){document.getElementById('body-ph-area').innerHTML=`<img src="${p.bodyPhoto}"/>`;}
+  updMg();loadAch();
+}
+function updMg(){
+  const p=DB.get('profile',{});
+  const bmi=p.height&&p.weight?(p.weight/((p.height/100)**2)).toFixed(1):'—';
+  document.getElementById('mg-disp').innerHTML=[{v:p.height?p.height+' cm':'—',l:'Height'},{v:p.weight?p.weight+' kg':'—',l:'Weight'},{v:p.bust||'—',l:'Bust'},{v:p.waist||'—',l:'Waist'},{v:p.hips||'—',l:'Hips'},{v:bmi,l:'BMI'}].map(i=>`<div class="mi"><div class="mi-v">${i.v}</div><div class="mi-l">${i.l}</div></div>`).join('');
+}
+function loadAch(){
+  const logs=DB.get('daily_logs',{});const days=Object.keys(logs).length;const ach=[];
+  if(days>=1)ach.push({i:'🌸',t:'First Step',d:'Logged your first day!'});
+  if(days>=7)ach.push({i:'🔥',t:'7 Day Streak',d:'One week of logging!'});
+  if(days>=30)ach.push({i:'👑',t:'30 Days Strong',d:'A whole month!'});
+  document.getElementById('ach-list').innerHTML=ach.length?ach.map(a=>`<div class="ach"><div class="ach-ic">${a.i}</div><div class="ach-in"><h4>${a.t}</h4><p>${a.d}</p></div></div>`).join(''):`<div style="text-align:center;padding:.8rem;color:var(--muted);font-size:13px;">${T[lang].noAch}</div>`;
+}
+function rf(e,cb){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>cb(ev.target.result);r.readAsDataURL(f);}
+function loadFace(e){rf(e,src=>{const p=DB.get('profile',{});p.facePhoto=src;DB.set('profile',p);document.getElementById('cab-face').innerHTML=`<img src="${src}"/>`;refHome();});}
+function loadBodyPh(e){rf(e,src=>{const p=DB.get('profile',{});p.bodyPhoto=src;DB.set('profile',p);document.getElementById('body-ph-area').innerHTML=`<img src="${src}"/>`;});}
+function refHome(){
+  const p=DB.get('profile',{});const nm=p.name||'Beautiful';
+  document.getElementById('h-nm').textContent=nm;
+  const hr=new Date().getHours();
+  document.getElementById('h-hi').textContent=hr<12?(lang==='ru'?'Доброе утро,':lang==='uz'?'Xayrli tong,':'Good morning,'):hr<17?(lang==='ru'?'Добрый день,':lang==='uz'?'Xayrli kun,':'Good day,'):(lang==='ru'?'Добрый вечер,':lang==='uz'?'Xayrli kech,':'Good evening,');
+  document.getElementById('h-dt').textContent=new Date().toLocaleDateString(lang==='ru'?'ru-RU':lang==='uz'?'uz-Latn':'en-US',{weekday:'long',month:'long',day:'numeric'});
+  const hav=document.getElementById('h-av');if(p.facePhoto)hav.innerHTML=`<img src="${p.facePhoto}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>`;else hav.textContent=(nm||'A').charAt(0).toUpperCase();
+  const log=DB.get('daily_logs',{})[today()]||{};
+  document.getElementById('tc-cal').textContent=(log.foods||[]).reduce((s,f)=>s+(parseInt(f.cal)||0),0)||'—';
+  document.getElementById('tc-stp').textContent=log.steps||'—';
+  document.getElementById('tc-ex').textContent=(log.exercises||[]).length||'—';
+  document.getElementById('tc-w').textContent=log.water||'—';
+  const tasks=(DB.get('plans',{})[today()]||{}).tasks||[];
+  document.getElementById('h-plan').innerHTML=tasks.length?tasks.slice(0,4).map(t=>`<div class="ppi"><div class="pp-ck ${t.done?'done':''}">✓</div><div class="pp-tx ${t.done?'done':''}">${t.text}</div></div>`).join(''):`<div style="text-align:center;padding:1rem;color:var(--muted);font-size:13px;">${T[lang].noPlan}</div>`;
+}
+let dlDate=today();
+function changeDay(d){const dt=new Date(dlDate+'T12:00:00');dt.setDate(dt.getDate()+d);if(dt>new Date())return;dlDate=dt.toISOString().split('T')[0];loadDly();}
+function loadDly(){
+  document.getElementById('dl-date').textContent=fmtDate(dlDate);
+  const log=DB.get('daily_logs',{})[dlDate]||{};
+  renderFoods(log.foods||[]);renderExs(log.exercises||[]);
+  document.getElementById('w-inp').value=log.water||'';
+  document.getElementById('stp-inp').value=log.steps||'';
+  const sf=document.getElementById('sf-area');const sb=document.getElementById('sb-area');
+  if(log.snapFace)sf.innerHTML=`<img src="${log.snapFace}"/>`;else sf.innerHTML=`<div class="sc2-ic">🤳</div><div class="sc2-l">Face photo</div>`;
+  if(log.snapBody)sb.innerHTML=`<img src="${log.snapBody}"/>`;else sb.innerHTML=`<div class="sc2-ic">🧍</div><div class="sc2-l">Body photo</div>`;
+  document.getElementById('adv-card').style.display='none';
+}
+function getDLog(){return DB.get('daily_logs',{})[dlDate]||{};}
+function saveDLog(l){const all=DB.get('daily_logs',{});all[dlDate]=l;DB.set('daily_logs',all);if(dlDate===today())refHome();}
+function saveFld(k,v){const l=getDLog();l[k]=v;saveDLog(l);}
+function addFood(){const fi=document.getElementById('f-inp');const ci=document.getElementById('f-cal');if(!fi.value.trim())return;const l=getDLog();if(!l.foods)l.foods=[];l.foods.push({name:fi.value.trim(),cal:ci.value||'0'});saveDLog(l);fi.value='';ci.value='';renderFoods(l.foods);}
+function delFood(i){const l=getDLog();l.foods.splice(i,1);saveDLog(l);renderFoods(l.foods);}
+function renderFoods(foods){document.getElementById('food-list').innerHTML=foods.map((f,i)=>`<div class="fe"><div class="fe-t">${f.name}</div><div class="fe-c">${f.cal} kcal</div><button class="fe-d" onclick="delFood(${i})">✕</button></div>`).join('');}
+function addEx(){const ei=document.getElementById('ex-inp');if(!ei.value.trim())return;const l=getDLog();if(!l.exercises)l.exercises=[];l.exercises.push({name:ei.value.trim()});saveDLog(l);ei.value='';renderExs(l.exercises);}
+function delEx(i){const l=getDLog();l.exercises.splice(i,1);saveDLog(l);renderExs(l.exercises);}
+function renderExs(exs){document.getElementById('ex-list').innerHTML=exs.map((e,i)=>`<div class="exe"><div class="exe-ic">💪</div><div class="exe-n">${e.name}</div><button class="fe-d" onclick="delEx(${i})">✕</button></div>`).join('');}
+function loadSnapFace(e){rf(e,src=>{const l=getDLog();l.snapFace=src;saveDLog(l);document.getElementById('sf-area').innerHTML=`<img src="${src}"/>`});}
+function loadSnapBody(e){rf(e,src=>{const l=getDLog();l.snapBody=src;saveDLog(l);document.getElementById('sb-area').innerHTML=`<img src="${src}"/>`});}
+async function getAdvice(){
+  const l=getDLog();const p=DB.get('profile',{});
+  const sum=`Person: ${p.name||'User'}, goal: ${p.goal||'wellness'}, height: ${p.height||'?'}cm, weight: ${p.weight||'?'}kg. Foods today: ${(l.foods||[]).map(f=>f.name).join(', ')||'none'}. Exercises: ${(l.exercises||[]).map(e=>e.name).join(', ')||'none'}. Steps: ${l.steps||0}. Water: ${l.water||0}ml.`;
+  const card=document.getElementById('adv-card');const tx=document.getElementById('adv-tx');
+  card.style.display='block';tx.textContent='...';
+  try{tx.textContent=await ai([{role:'user',content:`Based on my day: ${sum}. Give me warm personalized advice: best food for tomorrow for skin health, exercise recommendation, and one beauty tip. Be specific and encouraging.`}]);}
+  catch(e){tx.textContent='Try again!';}
+}
+let plDate=today(),plTab='tasks';
+function chPlanDay(d){const dt=new Date(plDate+'T12:00:00');dt.setDate(dt.getDate()+d);plDate=dt.toISOString().split('T')[0];loadPlan();}
+function setPTab(t,btn){plTab=t;document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');['tasks','skin','fit','notes'].forEach(tab=>document.getElementById('ptab-'+tab).classList.toggle('hidden',tab!==t));renderPLists();}
+function loadPlan(){document.getElementById('pl-date').textContent=fmtDate(plDate);renderPLists();const p=DB.get('plans',{})[plDate]||{};document.getElementById('pl-notes').value=p.notes||'';}
+function getP(){return DB.get('plans',{})[plDate]||{};}
+function saveP(p){const all=DB.get('plans',{});all[plDate]=p;DB.set('plans',all);}
+function saveNotes(){const p=getP();p.notes=document.getElementById('pl-notes').value;saveP(p);}
+function addTask(){const ti=document.getElementById('t-inp');const tt=document.getElementById('t-time');if(!ti.value.trim())return;const p=getP();if(!p.tasks)p.tasks=[];p.tasks.push({text:ti.value.trim(),time:tt.value,done:false});saveP(p);ti.value='';tt.value='';renderPLists();if(plDate===today())refHome();}
+function addSkin(){const ti=document.getElementById('sk-inp');if(!ti.value.trim())return;const p=getP();if(!p.skin)p.skin=[];p.skin.push({text:ti.value.trim(),done:false});saveP(p);ti.value='';renderPLists();}
+function addFit(){const ti=document.getElementById('fit-inp');if(!ti.value.trim())return;const p=getP();if(!p.fit)p.fit=[];p.fit.push({text:ti.value.trim(),done:false});saveP(p);ti.value='';renderPLists();}
+function togItem(tab,i){const p=getP();if(p[tab]){p[tab][i].done=!p[tab][i].done;saveP(p);renderPLists();if(plDate===today())refHome();}}
+function delItem(tab,i){const p=getP();if(p[tab]){p[tab].splice(i,1);saveP(p);renderPLists();}}
+function renderPLists(){
+  const p=getP();
+  [['tasks','pl-tasks'],['skin','pl-skin'],['fit','pl-fit']].forEach(([tab,eid])=>{
+    const items=p[tab]||[];const el=document.getElementById(eid);if(!el)return;
+    el.innerHTML=items.map((it,i)=>`<div class="pli"><div class="pli-ck ${it.done?'done':''}" onclick="togItem('${tab}',${i})">✓</div><div class="pli-b"><div class="pli-tx ${it.done?'done':''}">${it.text}</div>${it.time?`<div class="pli-tm">🕐 ${it.time}</div>`:''}</div><button class="pli-d" onclick="delItem('${tab}',${i})">✕</button></div>`).join('')||`<div style="text-align:center;padding:.8rem;color:var(--muted);font-size:12px;">No items yet</div>`;
+  });
+}
+async function genPlan(){
+  const p=DB.get('profile',{});
+  const r=await ai([{role:'user',content:`Create a daily wellness plan for ${p.name||'user'}, goal: ${p.goal||'wellness'}, age ${p.age||'?'}. List 7 specific tasks with times 07:00-21:00. Format: "HH:MM - Task description". One per line.`}]);
+  const lines=r.split('\n').filter(l=>l.trim());
+  const pl=getP();pl.tasks=[];
+  lines.forEach(l=>{const m=l.match(/(\d{2}:\d{2})\s*[-–]\s*(.+)/);if(m&&m[2].length>3)pl.tasks.push({text:m[2].trim(),time:m[1],done:false});});
+  saveP(pl);renderPLists();if(plDate===today())refHome();
+}
+async function genSkin(){
+  const r=await ai([{role:'user',content:`List 6 specific daily skincare steps including natural remedies. One step per line with emoji.`}]);
+  const lines=r.split('\n').filter(l=>l.trim()&&l.match(/\w{4,}/));
+  const pl=getP();pl.skin=lines.slice(0,6).map(l=>({text:l.replace(/^[\d\.\-\*]+\s*/,'').trim(),done:false}));
+  saveP(pl);renderPLists();
+}
+async function genFit(){
+  const p=DB.get('profile',{});
+  const r=await ai([{role:'user',content:`List 5 specific ${p.goal||'fitness'} exercises for today with reps or duration. One per line.`}]);
+  const lines=r.split('\n').filter(l=>l.trim()&&l.match(/\w{4,}/));
+  const pl=getP();pl.fit=lines.slice(0,5).map(l=>({text:l.replace(/^[\d\.\-\*]+\s*/,'').trim(),done:false}));
+  saveP(pl);renderPLists();
+}
+function loadProg(){
+  const p=DB.get('profile',{});
+  document.getElementById('pg-wt').textContent=p.weight?p.weight+'kg':'—';
+  document.getElementById('pg-bu').textContent=p.bust?p.bust+'cm':'—';
+  document.getElementById('pg-wa').textContent=p.waist?p.waist+'cm':'—';
+  document.getElementById('pg-hi').textContent=p.hips?p.hips+'cm':'—';
+}
+function loadBefore(e){rf(e,src=>{const el=document.getElementById('cc-before');el.innerHTML=`<img src="${src}"/><div class="cc-l">Before</div>`;});}
+function loadAfter(e){rf(e,src=>{const el=document.getElementById('cc-after');el.innerHTML=`<img src="${src}"/><div class="cc-l">After</div>`;});}
+async function analyzeBody(){
+  const card=document.getElementById('ana-card');const tx=document.getElementById('ana-tx');const chips=document.getElementById('ana-chips');
+  card.classList.add('on');tx.textContent='...';chips.innerHTML='';
+  const p=DB.get('profile',{});
+  try{
+    tx.textContent=await ai([{role:'user',content:`Give progress analysis for ${p.name||'user'}: weight ${p.weight||'?'}kg, bust ${p.bust||'?'}cm, waist ${p.waist||'?'}cm, hips ${p.hips||'?'}cm, goal: ${p.goal||'wellness'}. Give personalized advice and next steps.`}]);
+    chips.innerHTML=['Progress visible! ✓','Keep going! 💪','Stay consistent! 🌸'].map(c=>`<div class="chip cg">${c}</div>`).join('')+`<div class="chip ct">💡 Daily routine wins</div>`;
+  }catch(e){tx.textContent='Try again!';}
+}
+
+// MAIN AI FUNCTION - uses Groq via local server
+async function ai(messages) {
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages: messages })
+  });
+  const data = await res.json();
+  if (!data.reply) throw new Error('No reply');
+  return data.reply;
+}
+
+// CHAT
+let chatH=[];
+async function chatSend(){
+  const inp=document.getElementById('ch-inp');const txt=inp.value.trim();if(!txt)return;inp.value='';
+  addBubble('user',txt);chatH.push({role:'user',content:txt});
+  const t=addBubble('aida','...');
+  try{const r=await ai(chatH);t.remove();addBubble('aida',r);chatH.push({role:'assistant',content:r});}
+  catch(e){t.remove();addBubble('aida','Try again!');}
+}
+function addBubble(role,text){
+  const msgs=document.getElementById('ch-msgs');
+  const w=document.createElement('div');w.className='cmsg '+(role==='user'?'user':'aida');
+  if(role!=='user'){const av=document.createElement('div');av.className='cmsg-av';av.textContent='A';w.appendChild(av);}
+  const b=document.createElement('div');b.className='cbbl';b.textContent=text;w.appendChild(b);msgs.appendChild(w);msgs.scrollTop=msgs.scrollHeight;return w;
+}
+
+// VIDEO CALL
+let vcStr=null,vcRec=false,vcSR=null,vcH=[];
+async function initVC(){
+  syncLangBtns();
+  try{vcStr=await navigator.mediaDevices.getUserMedia({video:true,audio:false});const v=document.getElementById('vc-vid');v.srcObject=vcStr;v.style.display='block';document.getElementById('vc-cam-ph').style.display='none';}
+  catch(e){document.getElementById('vc-vid').style.display='none';document.getElementById('vc-cam-ph').style.display='flex';}
+  vcH=[];
+  setTimeout(async()=>{const g=T[lang].greet;vcSub(g);vcTalking(true);vcH.push({role:'assistant',content:g});vcSpeak(g,()=>vcTalking(false));},600);
+}
+function syncLangBtns(){document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.textContent.trim().toUpperCase()===lang.toUpperCase()));}
+function vcTalking(t){const av=document.getElementById('vc-av');const st=document.getElementById('vc-st');if(t){av.classList.add('vc-sp');st.textContent=T[lang].speak;st.classList.add('tk');}else{av.classList.remove('vc-sp');st.textContent=T[lang].tapTalk;st.classList.remove('tk');}}
+function vcSub(text){const el=document.getElementById('vc-sub');el.textContent=text;el.classList.add('on');setTimeout(()=>el.classList.remove('on'),Math.max(4000,text.length*55));}
+function vcSpeak(text,onEnd){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);const vs=speechSynthesis.getVoices();const fv=vs.find(v=>lang==='ru'?v.lang.startsWith('ru'):lang==='uz'?v.lang.startsWith('uz'):v.lang.startsWith('en'))||vs[0];if(fv)u.voice=fv;u.rate=0.92;u.pitch=1.1;u.onend=onEnd;speechSynthesis.speak(u);}
+async function vcMic(){
+  const btn=document.getElementById('vc-mic');const ww=document.getElementById('vc-wave-w');
+  if(vcRec){vcRec=false;btn.classList.remove('rec');ww.classList.remove('waving');if(vcSR)vcSR.stop();return;}
+  if(!('webkitSpeechRecognition'in window)&&!('SpeechRecognition'in window)){const t=prompt('Type message:');if(t)await vcInput(t);return;}
+  vcRec=true;btn.classList.add('rec');ww.classList.add('waving');
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;vcSR=new SR();
+  vcSR.lang=lang==='ru'?'ru-RU':lang==='uz'?'uz-UZ':'en-US';
+  vcSR.onresult=async e=>{const t=e.results[0][0].transcript;vcRec=false;btn.classList.remove('rec');ww.classList.remove('waving');vcSub('You: '+t);await vcInput(t);};
+  vcSR.onerror=vcSR.onend=()=>{if(vcRec){vcRec=false;btn.classList.remove('rec');ww.classList.remove('waving');}};
+  vcSR.start();document.getElementById('vc-st').textContent=T[lang].listen;
+}
+async function vcInput(text){
+  vcH.push({role:'user',content:text});
+  document.getElementById('vc-st').textContent=T[lang].think;
+  try{const r=await ai(vcH);vcH.push({role:'assistant',content:r});vcSub(r);vcTalking(true);vcSpeak(r,()=>vcTalking(false));}
+  catch(e){vcTalking(false);}
+}
+async function vcSkin(){
+  vcSub('Tell me about your skin and I will give you tips!');
+  const t=prompt('Describe your skin (e.g. oily, dry, dark spots):');
+  if(!t)return;
+  try{
+    const r=await ai([{role:'user',content:`My skin: ${t}. Give me 3 specific warm skin tips. Keep it short and encouraging.`}]);
+    vcSub(r);vcTalking(true);vcSpeak(r,()=>vcTalking(false));
+  }catch(e){vcTalking(false);}
+}
+let vcCamOn=true;
+function vcCam(){if(vcStr){vcCamOn=!vcCamOn;vcStr.getVideoTracks().forEach(t=>t.enabled=vcCamOn);}}
+function vcEnd(){speechSynthesis.cancel();if(vcStr){vcStr.getTracks().forEach(t=>t.stop());vcStr=null;}vcH=[];vcTalking(false);goTo('home');}
+
+// INIT
+setTimeout(()=>document.getElementById('loader').classList.add('out'),1900);
+setLang('en');refHome();
+</script>
+</body>
+</html>

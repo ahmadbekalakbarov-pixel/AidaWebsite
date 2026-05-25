@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Aida Beauty — Skincare Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --cream:#FAF7F4;
+  --warm:#F2EDE8;
+  --pink:#E8B4B8;
+  --pink2:#D4848A;
+  --dark:#1A1410;
+  --mid:#6B5B52;
+  --light:#9E8E85;
+  --gold:#C9A96E;
+  --white:#FFFFFF;
+  --border:#E8E0D8;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+button{font-family:'Outfit',sans-serif;cursor:pointer;border:none;background:none;}
+img{max-width:100%;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--pink);border-radius:4px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,247,244,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 4rem;}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.nav-logo{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;letter-spacing:0.02em;color:var(--dark);}
+.nav-logo span{color:var(--pink2);}
+.nav-links{display:flex;gap:2.5rem;align-items:center;}
+.nav-links a{font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--mid);transition:color 0.2s;}
+.nav-links a:hover{color:var(--dark);}
+.nav-right{display:flex;align-items:center;gap:1.2rem;}
+.nav-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background 0.2s;position:relative;cursor:pointer;}
+.nav-icon:hover{background:var(--warm);}
+.cart-badge{position:absolute;top:6px;right:6px;width:16px;height:16px;background:var(--pink2);border-radius:50%;font-size:9px;font-weight:600;color:#fff;display:flex;align-items:center;justify-content:center;}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:64px;}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:6rem 4rem 4rem;}
+.hero-tag{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--pink2);font-weight:600;margin-bottom:1.5rem;}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(48px,6vw,80px);line-height:1.05;color:var(--dark);margin-bottom:1.5rem;}
+.hero-h1 em{font-style:italic;color:var(--pink2);}
+.hero-p{font-size:16px;color:var(--mid);line-height:1.7;max-width:420px;margin-bottom:2.5rem;font-weight:300;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-primary{padding:14px 32px;background:var(--dark);color:#fff;border-radius:4px;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.2s;}
+.btn-primary:hover{background:var(--pink2);transform:translateY(-1px);}
+.btn-secondary{padding:14px 32px;border:1.5px solid var(--dark);color:var(--dark);border-radius:4px;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.2s;}
+.btn-secondary:hover{background:var(--dark);color:#fff;}
+.hero-right{background:var(--warm);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.hero-img-wrap{position:relative;z-index:1;}
+.hero-circle{position:absolute;width:500px;height:500px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--cream));opacity:0.5;}
+.hero-product-img{width:340px;height:460px;object-fit:cover;border-radius:200px 200px 160px 160px;position:relative;z-index:2;box-shadow:0 40px 80px rgba(0,0,0,0.12);}
+.hero-badge{position:absolute;bottom:80px;right:60px;background:#fff;border-radius:20px;padding:14px 20px;box-shadow:0 10px 40px rgba(0,0,0,0.1);z-index:3;}
+.hero-badge-t{font-size:11px;color:var(--light);text-transform:uppercase;letter-spacing:0.1em;}
+.hero-badge-v{font-family:'Playfair Display',serif;font-size:20px;color:var(--dark);font-weight:700;}
+
+/* MARQUEE */
+.marquee-wrap{background:var(--dark);padding:14px 0;overflow:hidden;}
+.marquee{display:flex;gap:3rem;animation:marquee 20s linear infinite;white-space:nowrap;}
+.marquee span{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);font-weight:500;}
+.marquee span.dot{color:var(--pink);font-size:16px;}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* SECTION */
+section{padding:6rem 4rem;}
+.section-tag{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--pink2);font-weight:600;margin-bottom:1rem;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,48px);color:var(--dark);line-height:1.2;margin-bottom:1rem;}
+.section-title em{font-style:italic;color:var(--pink2);}
+.section-sub{font-size:15px;color:var(--mid);line-height:1.7;max-width:480px;font-weight:300;}
+
+/* CATEGORIES */
+.categories{background:var(--cream);}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:3rem;}
+.cat-card{background:var(--warm);border-radius:16px;padding:2rem 1.5rem;text-align:center;cursor:pointer;transition:all 0.3s;border:1px solid transparent;}
+.cat-card:hover{border-color:var(--pink);transform:translateY(-4px);box-shadow:0 20px 40px rgba(212,132,138,0.15);}
+.cat-icon{font-size:40px;margin-bottom:1rem;}
+.cat-name{font-family:'Playfair Display',serif;font-size:16px;color:var(--dark);margin-bottom:0.4rem;}
+.cat-count{font-size:12px;color:var(--light);}
+
+/* PRODUCTS */
+.products{background:var(--white);}
+.products-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;}
+.filter-tabs{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1.5rem;}
+.filter-tab{padding:8px 20px;border-radius:100px;font-size:12px;font-weight:500;letter-spacing:0.05em;border:1.5px solid var(--border);color:var(--mid);cursor:pointer;transition:all 0.2s;}
+.filter-tab.active,.filter-tab:hover{background:var(--dark);border-color:var(--dark);color:#fff;}
+.view-all{font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--pink2);border-bottom:1.5px solid var(--pink2);padding-bottom:2px;}
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;}
+.product-card{cursor:pointer;group:true;}
+.product-img-wrap{position:relative;overflow:hidden;border-radius:12px;background:var(--warm);margin-bottom:1.2rem;aspect-ratio:3/4;}
+.product-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s;}
+.product-card:hover .product-img-wrap img{transform:scale(1.05);}
+.product-overlay{position:absolute;inset:0;background:rgba(26,20,16,0);transition:background 0.3s;display:flex;align-items:flex-end;padding:1rem;}
+.product-card:hover .product-overlay{background:rgba(26,20,16,0.15);}
+.product-actions{display:flex;gap:8px;transform:translateY(20px);opacity:0;transition:all 0.3s;}
+.product-card:hover .product-actions{transform:translateY(0);opacity:1;}
+.pa-btn{padding:10px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;border:none;}
+.pa-cart{background:#fff;color:var(--dark);flex:1;}
+.pa-cart:hover{background:var(--dark);color:#fff;}
+.pa-wish{width:38px;height:38px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.pa-wish:hover{background:var(--pink);color:#fff;}
+.product-brand{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--light);margin-bottom:4px;}
+.product-name{font-family:'Playfair Display',serif;font-size:16px;color:var(--dark);margin-bottom:6px;line-height:1.3;}
+.product-desc{font-size:12px;color:var(--light);margin-bottom:10px;line-height:1.5;}
+.product-bottom{display:flex;align-items:center;justify-content:space-between;}
+.product-price{font-size:16px;font-weight:600;color:var(--dark);}
+.product-price s{font-size:13px;color:var(--light);font-weight:400;margin-right:6px;}
+.product-rating{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--light);}
+.stars{color:var(--gold);}
+.badge-new{position:absolute;top:12px;left:12px;background:var(--dark);color:#fff;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;}
+.badge-sale{position:absolute;top:12px;left:12px;background:var(--pink2);color:#fff;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;}
+
+/* BANNER */
+.banner{background:var(--dark);padding:5rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.banner-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);color:#fff;line-height:1.2;margin-bottom:1.5rem;}
+.banner-title em{font-style:italic;color:var(--pink);}
+.banner-p{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:2rem;font-weight:300;}
+.btn-light{padding:14px 32px;background:#fff;color:var(--dark);border-radius:4px;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.2s;display:inline-block;}
+.btn-light:hover{background:var(--pink);color:#fff;}
+.banner-right{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.banner-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1.5rem;}
+.banner-stat-v{font-family:'Playfair Display',serif;font-size:36px;color:#fff;font-weight:700;}
+.banner-stat-l{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;text-transform:uppercase;letter-spacing:0.1em;}
+
+/* INGREDIENTS */
+.ingredients{background:var(--warm);}
+.ing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;}
+.ing-card{background:#fff;border-radius:16px;padding:2rem;border:1px solid var(--border);}
+.ing-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--cream));display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:1.2rem;}
+.ing-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--dark);margin-bottom:0.6rem;}
+.ing-desc{font-size:13px;color:var(--mid);line-height:1.6;font-weight:300;}
+
+/* TESTIMONIALS */
+.testimonials{background:var(--cream);}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;}
+.test-card{background:#fff;border-radius:16px;padding:2rem;border:1px solid var(--border);}
+.test-stars{color:var(--gold);font-size:14px;margin-bottom:1rem;}
+.test-text{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:var(--dark);line-height:1.6;margin-bottom:1.5rem;}
+.test-author{display:flex;align-items:center;gap:10px;}
+.test-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--pink2));display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:600;}
+.test-name{font-size:13px;font-weight:600;color:var(--dark);}
+.test-loc{font-size:11px;color:var(--light);}
+
+/* NEWSLETTER */
+.newsletter{background:linear-gradient(135deg,#F9F0F0,var(--warm));padding:5rem 4rem;text-align:center;}
+.newsletter-title{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);color:var(--dark);margin-bottom:1rem;}
+.newsletter-title em{font-style:italic;color:var(--pink2);}
+.newsletter-p{font-size:15px;color:var(--mid);margin-bottom:2rem;font-weight:300;}
+.newsletter-form{display:flex;gap:0;max-width:440px;margin:0 auto;border-radius:6px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
+.newsletter-form input{flex:1;padding:14px 20px;border:none;background:#fff;font-size:14px;font-family:'Outfit',sans-serif;outline:none;color:var(--dark);}
+.newsletter-form input::placeholder{color:var(--light);}
+.newsletter-form button{padding:14px 24px;background:var(--dark);color:#fff;font-size:13px;font-weight:600;letter-spacing:0.05em;white-space:nowrap;transition:background 0.2s;}
+.newsletter-form button:hover{background:var(--pink2);}
+
+/* FOOTER */
+footer{background:var(--dark);padding:4rem;color:rgba(255,255,255,0.6);}
+.footer-inner{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+.footer-logo{font-family:'Playfair Display',serif;font-size:24px;font-style:italic;color:#fff;margin-bottom:1rem;}
+.footer-logo span{color:var(--pink);}
+.footer-desc{font-size:13px;line-height:1.7;font-weight:300;max-width:240px;}
+.footer-title{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#fff;font-weight:600;margin-bottom:1.2rem;}
+.footer-links{display:flex;flex-direction:column;gap:0.6rem;}
+.footer-links a{font-size:13px;color:rgba(255,255,255,0.5);transition:color 0.2s;font-weight:300;}
+.footer-links a:hover{color:#fff;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;}
+.footer-bottom p{font-size:12px;}
+
+/* CART DRAWER */
+.cart-drawer{position:fixed;top:0;right:-440px;width:440px;height:100vh;background:#fff;z-index:200;transition:right 0.4s cubic-bezier(0.25,0.46,0.45,0.94);box-shadow:-20px 0 60px rgba(0,0,0,0.1);display:flex;flex-direction:column;}
+.cart-drawer.open{right:0;}
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:199;opacity:0;pointer-events:none;transition:opacity 0.4s;}
+.cart-overlay.on{opacity:1;pointer-events:all;}
+.cart-header{padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.cart-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--dark);}
+.cart-close{width:36px;height:36px;border-radius:50%;background:var(--warm);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;}
+.cart-items{flex:1;overflow-y:auto;padding:1.5rem 2rem;}
+.cart-item{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border);}
+.cart-item-img{width:80px;height:100px;border-radius:8px;background:var(--warm);object-fit:cover;flex-shrink:0;}
+.cart-item-info{flex:1;}
+.cart-item-brand{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--light);margin-bottom:4px;}
+.cart-item-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--dark);margin-bottom:8px;}
+.cart-item-price{font-size:15px;font-weight:600;color:var(--dark);}
+.cart-qty{display:flex;align-items:center;gap:10px;margin-top:8px;}
+.qty-btn{width:28px;height:28px;border-radius:6px;background:var(--warm);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:background 0.2s;}
+.qty-btn:hover{background:var(--pink);}
+.qty-num{font-size:14px;font-weight:600;min-width:20px;text-align:center;}
+.cart-del{margin-left:auto;color:var(--light);cursor:pointer;font-size:18px;align-self:flex-start;}
+.cart-empty{text-align:center;padding:3rem 1rem;}
+.cart-empty-icon{font-size:48px;margin-bottom:1rem;}
+.cart-empty-t{font-family:'Playfair Display',serif;font-size:20px;color:var(--dark);margin-bottom:0.5rem;}
+.cart-empty-p{font-size:13px;color:var(--light);}
+.cart-footer{padding:1.5rem 2rem;border-top:1px solid var(--border);}
+.cart-subtotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;}
+.cart-subtotal-l{font-size:14px;color:var(--mid);}
+.cart-subtotal-v{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--dark);}
+.checkout-btn{width:100%;padding:16px;background:var(--dark);color:#fff;border-radius:6px;font-size:14px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;transition:background 0.2s;}
+.checkout-btn:hover{background:var(--pink2);}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:#fff;padding:12px 24px;border-radius:8px;font-size:13px;font-weight:500;z-index:300;transition:transform 0.3s;white-space:nowrap;}
+.toast.on{transform:translateX(-50%) translateY(0);}
+
+/* WISHLIST */
+.wish-btn.active{color:var(--pink2)!important;}
+
+@media(max-width:768px){
+  nav{padding:0 1.5rem;}
+  .nav-links{display:none;}
+  .hero{grid-template-columns:1fr;min-height:auto;}
+  .hero-left{padding:6rem 1.5rem 3rem;}
+  .hero-right{height:400px;}
+  section{padding:4rem 1.5rem;}
+  .cat-grid{grid-template-columns:repeat(2,1fr);}
+  .products-grid{grid-template-columns:repeat(2,1fr);}
+  .banner{grid-template-columns:1fr;padding:4rem 1.5rem;}
+  .ing-grid,.test-grid{grid-template-columns:1fr;}
+  .newsletter{padding:4rem 1.5rem;}
+  footer{padding:3rem 1.5rem;}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+  .cart-drawer{width:100%;}
+  .products-header{flex-direction:column;align-items:flex-start;gap:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <div class="cart-title">Your Bag</div>
+    <div class="cart-close" onclick="closeCart()">✕</div>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">
+      <div class="cart-empty-icon">🛍️</div>
+      <div class="cart-empty-t">Your bag is empty</div>
+      <div class="cart-empty-p">Add some beautiful products to get started</div>
+    </div>
+  </div>
+  <div class="cart-footer" id="cart-footer" style="display:none;">
+    <div class="cart-subtotal">
+      <div class="cart-subtotal-l">Subtotal</div>
+      <div class="cart-subtotal-v" id="cart-total">$0.00</div>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">Checkout →</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Aida <span>Beauty</span></a>
+    <div class="nav-links">
+      <a href="#shop">Shop</a>
+      <a href="#ingredients">Ingredients</a>
+      <a href="#about">About</a>
+      <a href="index.html">Ask Aida AI</a>
+    </div>
+    <div class="nav-right">
+      <div class="nav-icon" onclick="toggleWishlist()" title="Wishlist">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <div class="nav-icon" onclick="openCart()" title="Cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <div class="cart-badge" id="cart-badge" style="display:none;">0</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">New Collection 2025</div>
+    <h1 class="hero-h1">Skincare that <em>actually</em> works</h1>
+    <p class="hero-p">Certified, science-backed formulas crafted with the world's finest ingredients. Trusted by dermatologists worldwide.</p>
+    <div class="hero-btns">
+      <a href="#shop" class="btn-primary">Shop Now</a>
+      <a href="index.html" class="btn-secondary">Ask Aida AI</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-circle"></div>
+    <div class="hero-img-wrap">
+      <div style="width:300px;height:420px;border-radius:200px 200px 160px 160px;background:linear-gradient(160deg,#F2C4C8,#E8B4B8,#D4848A);position:relative;z-index:2;box-shadow:0 40px 80px rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;">
+        <div style="font-size:60px;">🧴</div>
+        <div style="font-family:'Playfair Display',serif;font-size:18px;color:#fff;font-style:italic;text-align:center;padding:0 1rem;">Hydra Glow Serum</div>
+      </div>
+    </div>
+    <div class="hero-badge">
+      <div class="hero-badge-t">Happy Clients</div>
+      <div class="hero-badge-v">50K+</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span>Certified Clean</span><span class="dot">✦</span>
+    <span>Dermatologist Tested</span><span class="dot">✦</span>
+    <span>Cruelty Free</span><span class="dot">✦</span>
+    <span>Worldwide Shipping</span><span class="dot">✦</span>
+    <span>Science Backed</span><span class="dot">✦</span>
+    <span>Certified Clean</span><span class="dot">✦</span>
+    <span>Dermatologist Tested</span><span class="dot">✦</span>
+    <span>Cruelty Free</span><span class="dot">✦</span>
+    <span>Worldwide Shipping</span><span class="dot">✦</span>
+    <span>Science Backed</span><span class="dot">✦</span>
+    <span>Certified Clean</span><span class="dot">✦</span>
+    <span>Dermatologist Tested</span><span class="dot">✦</span>
+    <span>Cruelty Free</span><span class="dot">✦</span>
+    <span>Worldwide Shipping</span><span class="dot">✦</span>
+    <span>Science Backed</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="categories">
+  <div class="section-tag">Browse by Category</div>
+  <h2 class="section-title">Find your <em>perfect</em> routine</h2>
+  <div class="cat-grid">
+    <div class="cat-card" onclick="filterProducts('Serum')">
+      <div class="cat-icon">💧</div>
+      <div class="cat-name">Serums</div>
+      <div class="cat-count">12 products</div>
+    </div>
+    <div class="cat-card" onclick="filterProducts('Moisturizer')">
+      <div class="cat-icon">🌿</div>
+      <div class="cat-name">Moisturizers</div>
+      <div class="cat-count">8 products</div>
+    </div>
+    <div class="cat-card" onclick="filterProducts('Cleanser')">
+      <div class="cat-icon">✨</div>
+      <div class="cat-name">Cleansers</div>
+      <div class="cat-count">6 products</div>
+    </div>
+    <div class="cat-card" onclick="filterProducts('Mask')">
+      <div class="cat-icon">🎭</div>
+      <div class="cat-name">Face Masks</div>
+      <div class="cat-count">9 products</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="shop">
+  <div class="products-header">
+    <div>
+      <div class="section-tag">Our Products</div>
+      <h2 class="section-title">Bestselling <em>essentials</em></h2>
+      <div class="filter-tabs">
+        <div class="filter-tab active" onclick="filterTab(this,'All')">All</div>
+        <div class="filter-tab" onclick="filterTab(this,'Serum')">Serums</div>
+        <div class="filter-tab" onclick="filterTab(this,'Moisturizer')">Moisturizers</div>
+        <div class="filter-tab" onclick="filterTab(this,'Cleanser')">Cleansers</div>
+        <div class="filter-tab" onclick="filterTab(this,'Mask')">Masks</div>
+      </div>
+    </div>
+  </div>
+  <div class="products-grid" id="products-grid"></div>
+</section>
+
+<!-- BANNER -->
+<div class="banner" id="about">
+  <div>
+    <h2 class="banner-title">Skincare guided by <em>science</em> & nature</h2>
+    <p class="banner-p">Every product in our collection is independently certified, cruelty-free, and formulated with the highest quality ingredients sourced worldwide.</p>
+    <a href="#shop" class="btn-light">Explore Collection</a>
+  </div>
+  <div class="banner-right">
+    <div class="banner-stat"><div class="banner-stat-v">98%</div><div class="banner-stat-l">Satisfaction Rate</div></div>
+    <div class="banner-stat"><div class="banner-stat-v">50K+</div><div class="banner-stat-l">Happy Clients</div></div>
+    <div class="banner-stat"><div class="banner-stat-v">100%</div><div class="banner-stat-l">Certified Clean</div></div>
+    <div class="banner-stat"><div class="banner-stat-v">120+</div><div class="banner-stat-l">Countries</div></div>
+  </div>
+</div>
+
+<!-- INGREDIENTS -->
+<section class="ingredients" id="ingredients">
+  <div class="section-tag">Key Ingredients</div>
+  <h2 class="section-title">Nature's most <em>powerful</em> actives</h2>
+  <p class="section-sub">We use only the finest certified ingredients, each chosen for their proven efficacy and safety.</p>
+  <div class="ing-grid">
+    <div class="ing-card">
+      <div class="ing-icon">🥒</div>
+      <div class="ing-name">Cucumber Extract</div>
+      <div class="ing-desc">Deeply hydrating and soothing. Reduces puffiness and calms irritated skin while providing intense moisture.</div>
+    </div>
+    <div class="ing-card">
+      <div class="ing-icon">🌹</div>
+      <div class="ing-name">Rose Hip Oil</div>
+      <div class="ing-desc">Rich in Vitamin C and retinoids. Fades dark spots, brightens complexion and promotes cell regeneration.</div>
+    </div>
+    <div class="ing-card">
+      <div class="ing-icon">🍵</div>
+      <div class="ing-name">Green Tea Extract</div>
+      <div class="ing-desc">Powerful antioxidant that protects against environmental damage and reduces signs of premature aging.</div>
+    </div>
+    <div class="ing-card">
+      <div class="ing-icon">🧬</div>
+      <div class="ing-name">Hyaluronic Acid</div>
+      <div class="ing-desc">Holds 1000x its weight in water. Plumps skin, reduces fine lines and provides lasting hydration.</div>
+    </div>
+    <div class="ing-card">
+      <div class="ing-icon">☀️</div>
+      <div class="ing-name">Vitamin C</div>
+      <div class="ing-desc">Brightens skin tone, fades hyperpigmentation and boosts collagen production for firmer skin.</div>
+    </div>
+    <div class="ing-card">
+      <div class="ing-icon">🫚</div>
+      <div class="ing-name">Squalane</div>
+      <div class="ing-desc">Lightweight, non-comedogenic oil that mimics skin's natural sebum for perfect balance and glow.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-tag">Reviews</div>
+  <h2 class="section-title">What our <em>customers</em> say</h2>
+  <div class="test-grid">
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <div class="test-text">"My skin has completely transformed in just 4 weeks. The Hydra Glow Serum is unlike anything I've tried before."</div>
+      <div class="test-author"><div class="test-av">S</div><div><div class="test-name">Sofia M.</div><div class="test-loc">Milan, Italy</div></div></div>
+    </div>
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <div class="test-text">"Finally a skincare brand that delivers real results. The dark spot corrector reduced my spots by 80% in one month."</div>
+      <div class="test-author"><div class="test-av">A</div><div><div class="test-name">Aisha K.</div><div class="test-loc">Dubai, UAE</div></div></div>
+    </div>
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <div class="test-text">"I love that every product is certified and clean. I can trust what I put on my skin. Absolutely obsessed!"</div>
+      <div class="test-author"><div class="test-av">L</div><div><div class="test-name">Lena P.</div><div class="test-loc">Paris, France</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="newsletter">
+  <div class="section-tag" style="text-align:center;">Stay in the loop</div>
+  <h2 class="newsletter-title">Get <em>exclusive</em> skincare tips</h2>
+  <p class="newsletter-p">Join 50,000+ beauty lovers and get weekly tips, early access and special offers.</p>
+  <div class="newsletter-form">
+    <input type="email" placeholder="Your email address"/>
+    <button onclick="subscribeNewsletter()">Subscribe</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Aida <span>Beauty</span></div>
+      <div class="footer-desc">Certified, science-backed skincare for every skin type. Powered by Aida AI wellness technology.</div>
+    </div>
+    <div>
+      <div class="footer-title">Shop</div>
+      <div class="footer-links">
+        <a href="#">Serums</a>
+        <a href="#">Moisturizers</a>
+        <a href="#">Cleansers</a>
+        <a href="#">Masks</a>
+        <a href="#">Bundles</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-title">Help</div>
+      <div class="footer-links">
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+        <a href="#">FAQ</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-title">Company</div>
+      <div class="footer-links">
+        <a href="#">About</a>
+        <a href="#">Ingredients</a>
+        <a href="#">Sustainability</a>
+        <a href="index.html">Aida AI</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Aida Beauty. All rights reserved.</p>
+    <p>Made with 🌸 by Aida AI</p>
+  </div>
+</footer>
+
+<script>
+// PRODUCTS DATA
+const products = [
+  {id:1,brand:'Aida Beauty',name:'Hydra Glow Serum',desc:'Hyaluronic acid + Vitamin C',price:48,oldPrice:65,category:'Serum',badge:'new',rating:4.9,reviews:234,emoji:'💧'},
+  {id:2,brand:'Aida Beauty',name:'Rose Hip Radiance Oil',desc:'Pure cold-pressed rosehip',price:38,oldPrice:null,category:'Serum',badge:null,rating:4.8,reviews:189,emoji:'🌹'},
+  {id:3,brand:'Aida Beauty',name:'Cucumber Calm Gel',desc:'Soothing + anti-redness',price:32,oldPrice:42,category:'Moisturizer',badge:'sale',rating:4.7,reviews:156,emoji:'🥒'},
+  {id:4,brand:'Aida Beauty',name:'Green Tea Antioxidant Cream',desc:'Anti-aging + brightening',price:55,oldPrice:null,category:'Moisturizer',badge:'new',rating:4.9,reviews:312,emoji:'🍵'},
+  {id:5,brand:'Aida Beauty',name:'Gentle Milk Cleanser',desc:'Removes makeup gently',price:28,oldPrice:null,category:'Cleanser',badge:null,rating:4.6,reviews:98,emoji:'🥛'},
+  {id:6,brand:'Aida Beauty',name:'AHA Glow Exfoliator',desc:'10% AHA + 1% BHA blend',price:42,oldPrice:52,category:'Cleanser',badge:'sale',rating:4.8,reviews:267,emoji:'✨'},
+  {id:7,brand:'Aida Beauty',name:'Vitamin C Brightening Mask',desc:'Fades dark spots in 15 min',price:36,oldPrice:null,category:'Mask',badge:'new',rating:4.9,reviews:445,emoji:'☀️'},
+  {id:8,brand:'Aida Beauty',name:'Collagen Boost Night Mask',desc:'Overnight skin repair',price:52,oldPrice:68,category:'Mask',badge:'sale',rating:4.7,reviews:178,emoji:'🌙'},
+];
+
+let cart = JSON.parse(localStorage.getItem('aida_cart') || '[]');
+let wishlist = JSON.parse(localStorage.getItem('aida_wish') || '[]');
+let currentFilter = 'All';
+
+function saveCart(){localStorage.setItem('aida_cart',JSON.stringify(cart));}
+function saveWish(){localStorage.setItem('aida_wish',JSON.stringify(wishlist));}
+
+function renderProducts(filter='All'){
+  const grid = document.getElementById('products-grid');
+  const filtered = filter === 'All' ? products : products.filter(p=>p.category===filter);
+  grid.innerHTML = filtered.map(p=>`
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#F9F0F0,#F2EDE8);font-size:80px;">${p.emoji}</div>
+        ${p.badge?`<div class="badge-${p.badge}">${p.badge}</div>`:''}
+        <div class="product-overlay">
+          <div class="product-actions">
+            <button class="pa-btn pa-cart" onclick="addToCart(${p.id})">Add to Bag</button>
+            <button class="pa-btn pa-wish wish-btn ${wishlist.includes(p.id)?'active':''}" onclick="toggleWish(${p.id},this)" style="color:${wishlist.includes(p.id)?'#D4848A':'#1A1410'}">♥</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-brand">${p.brand}</div>
+      <div class="product-name">${p.name}</div>
+      <div class="product-desc">${p.desc}</div>
+      <div class="product-bottom">
+        <div class="product-price">${p.oldPrice?`<s>$${p.oldPrice}</s>`:''} $${p.price}</div>
+        <div class="product-rating"><span class="stars">★</span> ${p.rating} (${p.reviews})</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterTab(btn, filter){
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = filter;
+  renderProducts(filter);
+}
+
+function filterProducts(filter){
+  document.getElementById('shop').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>{
+    document.querySelectorAll('.filter-tab').forEach(t=>{
+      t.classList.toggle('active', t.textContent===filter || (filter==='All' && t.textContent==='All'));
+    });
+    renderProducts(filter);
+  }, 500);
+}
+
+function addToCart(id){
+  const product = products.find(p=>p.id===id);
+  const existing = cart.find(i=>i.id===id);
+  if(existing) existing.qty++;
+  else cart.push({...product, qty:1});
+  saveCart();
+  updateCartUI();
+  showToast(`${product.name} added to bag! 🛍️`);
+}
+
+function removeFromCart(id){
+  cart = cart.filter(i=>i.id!==id);
+  saveCart();
+  updateCartUI();
+  renderCartItems();
+}
+
+function updateQty(id, delta){
+  const item = cart.find(i=>i.id===id);
+  if(item){
+    item.qty += delta;
+    if(item.qty <= 0) removeFromCart(id);
+    else { saveCart(); renderCartItems(); updateCartUI(); }
+  }
+}
+
+function updateCartUI(){
+  const total = cart.reduce((s,i)=>s+i.qty,0);
+  const badge = document.getElementById('cart-badge');
+  badge.style.display = total > 0 ? 'flex' : 'none';
+  badge.textContent = total;
+}
+
+function renderCartItems(){
+  const el = document.getElementById('cart-items');
+  const footer = document.getElementById('cart-footer');
+  if(cart.length === 0){
+    el.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛍️</div><div class="cart-empty-t">Your bag is empty</div><div class="cart-empty-p">Add some beautiful products to get started</div></div>`;
+    footer.style.display = 'none';
+    return;
+  }
+  const subtotal = cart.reduce((s,i)=>s+(i.price*i.qty),0);
+  el.innerHTML = cart.map(i=>`
+    <div class="cart-item">
+      <div style="width:80px;height:100px;border-radius:8px;background:linear-gradient(135deg,#F9F0F0,#F2EDE8);display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0;">${i.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-brand">${i.brand}</div>
+        <div class="cart-item-name">${i.name}</div>
+        <div class="cart-item-price">$${(i.price*i.qty).toFixed(2)}</div>
+        <div class="cart-qty">
+          <div class="qty-btn" onclick="updateQty(${i.id},-1)">−</div>
+          <div class="qty-num">${i.qty}</div>
+          <div class="qty-btn" onclick="updateQty(${i.id},1)">+</div>
+        </div>
+      </div>
+      <div class="cart-del" onclick="removeFromCart(${i.id})">✕</div>
+    </div>
+  `).join('');
+  document.getElementById('cart-total').textContent = `$${subtotal.toFixed(2)}`;
+  footer.style.display = 'block';
+}
+
+function openCart(){
+  document.getElementById('cart-drawer').classList.add('open');
+  document.getElementById('cart-overlay').classList.add('on');
+  renderCartItems();
+}
+
+function closeCart(){
+  document.getElementById('cart-drawer').classList.remove('open');
+  document.getElementById('cart-overlay').classList.remove('on');
+}
+
+function toggleWish(id, btn){
+  if(wishlist.includes(id)){
+    wishlist = wishlist.filter(w=>w!==id);
+    btn.classList.remove('active');
+    btn.style.color = '#1A1410';
+    showToast('Removed from wishlist');
+  } else {
+    wishlist.push(id);
+    btn.classList.add('active');
+    btn.style.color = '#D4848A';
+    showToast('Added to wishlist ♥');
+  }
+  saveWish();
+}
+
+function toggleWishlist(){
+  showToast(`You have ${wishlist.length} items in your wishlist ♥`);
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'), 2500);
+}
+
+function checkout(){
+  showToast('Redirecting to checkout... 🛍️');
+  setTimeout(()=>closeCart(), 1000);
+}
+
+function subscribeNewsletter(){
+  showToast('Thank you for subscribing! 🌸');
+}
+
+// INIT
+renderProducts();
+updateCartUI();
+</script>
+</body>
+</html>

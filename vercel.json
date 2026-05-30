@@ -6,7 +6,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "index.html",
+      "src": "*.html",
       "use": "@vercel/static"
     }
   ],
@@ -16,8 +16,12 @@
       "dest": "server.js"
     },
     {
+      "src": "/shop.html",
+      "dest": "/shop.html"
+    },
+    {
       "src": "/",
-      "dest": "index.html"
+      "dest": "/index.html"
     }
   ]
 }
